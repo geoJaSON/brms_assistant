@@ -24,7 +24,7 @@ docsearch = Pinecone.from_existing_index('langchain1', embeddings)
 
 
 def ask_question():
-    docs = docsearch.similarity_search(question, include_metadata=True)
+    docs = docsearch.similarity_search(question)
     return chain.run(input_documents=docs, question=question)
 
 
