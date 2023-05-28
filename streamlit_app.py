@@ -24,17 +24,20 @@ docsearch = Pinecone.from_existing_index('langchain1', embeddings)
 
 
 def ask_question():
-    docs = docsearch.similarity_search(question)
-    return chain.run(input_documents=docs, question=question)
+    try:
+        docs = docsearch.similarity_search(question)
+        return chain.run(input_documents=docs, question=question)
+    except Exception as e:
+        st.error("An error has occurred. Please try again.")
 
+# Use sidebar for input
+st.sidebar.header('BRMS Assistant')
+st.sidebar.write('This is a simple app to help you with your BRMS questions')
 
-st.header('BRMS Assistant')
-st.write('This is a simple app to help you with your BRMS questions')
-
-question = st.text_input('Enter your question here')
+question = st.sidebar.text_input('Enter your question here')
 
 if question:
-    answer = ask_question()
-    st.write(answer)
+    with st.spinner('Thinking...'):
+        answer = ask_question()
+        st.markdown(f'**Answer**: {answer}')
 # %%
- 
