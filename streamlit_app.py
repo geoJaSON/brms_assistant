@@ -31,6 +31,8 @@ def ask_question():
         st.error("An error has occurred. Please try again.")
 
 # Use sidebar for input
+st.sidebar.image("uCOP_logo.png", use_column_width=True)  # add logo
+
 st.sidebar.header('BRMS Bot')
 st.sidebar.write('This is a simple app to help you with your BRMS questions')
 
