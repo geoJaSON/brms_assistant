@@ -6,8 +6,8 @@ from langchain.chains.question_answering import load_qa_chain
 import pinecone
 import streamlit as st
 #%%
-OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
-PINECONE_API_KEY = st.secrets["PINECONE_API_KEY"]
+OPENAI_API_KEY = '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'
+PINECONE_API_KEY = '6c3688a4-7269-4e09-b5cd-003e6b1a4f08'
 PINECONE_API_ENV = 'northamerica-northeast1-gcp'
 
 #%%
@@ -22,24 +22,79 @@ chain = load_qa_chain(llm, chain_type="stuff")
 docsearch = Pinecone.from_existing_index('langchain1', embeddings)
 #%%
 
+css = """
+<style>
+.chat-message {
+    padding: 1.5rem; border-radius: 0.5rem; margin-bottom: 1rem; display: flex
+}
+.chat-message.user {
+    background-color: #2b313e
+}
+.chat-message.bot {
+    background-color: #475063
+}
+.chat-message .avatar {
+  width: 20%;
+}
+.chat-message .avatar img {
+  max-width: 78px;
+  max-height: 78px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.chat-message .message {
+  width: 80%;
+  padding: 0 1.5rem;
+  color: #fff;
+}
+</style>
+"""
 
-def ask_question():
+bot_template = """
+<div class="chat-message bot">
+    <div class="avatar">
+        <img src="https://cdn.dribbble.com/users/160155/screenshots/1526505/media/617bae5c11b9b42021065f5a610001dc.png" style="max-height: 78px; max-width: 78px; border-radius: 50%; object-fit: cover;">
+    </div>
+    <div class="message">{{MSG}}</div>
+</div>
+"""
+user_template = """
+<div class="chat-message user">
+    <div class="avatar">
+        <img src="https://www.publications.usace.army.mil/Portals/76/Publications/EngineerStandardsGraphics/gs-15.gif">
+    </div>    
+    <div class="message">{{MSG}}</div>
+</div>
+"""
+st.markdown(css, unsafe_allow_html=True)
+
+
+def ask_question(question):
     try:
         docs = docsearch.similarity_search(question)
         return chain.run(input_documents=docs, question=question)
     except Exception as e:
         st.error("An error has occurred. Please try again.")
 
-# Use sidebar for input
+# Initialize session state if not yet done
+if "chat_history" not in st.session_state:
+    st.session_state.chat_history = []
+
+st.sidebar.header('ESF #3 Chatbot')
 st.sidebar.image("uCOP_logo.png", use_column_width=True)  # add logo
-
-st.sidebar.header('BRMS Bot')
-st.sidebar.write('This is a simple app to help you with your BRMS questions')
-
 question = st.sidebar.text_input('Enter your question here')
 
-if question:
+if question and (len(st.session_state.chat_history) == 0 or question != st.session_state.chat_history[-1][0]):
     with st.spinner('Thinking...'):
-        answer = ask_question()
-        st.markdown(f'**Answer**: {answer}')
+        answer = ask_question(question)
+        # Save question and answer in the session state
+        st.session_state.chat_history.append((question, answer))
+
+# Display chat history
+
+for q, a in reversed(st.session_state.chat_history):
+    st.write(user_template.replace("{{MSG}}", q), unsafe_allow_html=True)
+    st.write(bot_template.replace("{{MSG}}", a), unsafe_allow_html=True)
+
+
 # %%
