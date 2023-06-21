@@ -6,8 +6,8 @@ from langchain.chains.question_answering import load_qa_chain
 import pinecone
 import streamlit as st
 #%%
-OPENAI_API_KEY = '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'
-PINECONE_API_KEY = '6c3688a4-7269-4e09-b5cd-003e6b1a4f08'
+OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
+PINECONE_API_KEY = st.secrets["PINECONE_API_KEY"]
 PINECONE_API_ENV = 'northamerica-northeast1-gcp'
 
 #%%
