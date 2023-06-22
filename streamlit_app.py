@@ -19,7 +19,7 @@ pinecone.init(
 embeddings = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY)
 llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY)
 chain = load_qa_chain(llm, chain_type="stuff")
-docsearch = Pinecone.from_existing_index('langchain1', embeddings)
+docsearch = Pinecone.from_existing_index('esfsearch', embeddings)
 #%%
 
 css = """
@@ -80,7 +80,7 @@ def ask_question(question):
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
-st.sidebar.header('ESF #3 Chatbot')
+st.sidebar.header('ESF #3 Chatbot BETA')
 st.sidebar.image("uCOP_logo.png", use_column_width=True)  # add logo
 question = st.sidebar.text_input('Enter your question here')
 
