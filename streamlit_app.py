@@ -82,7 +82,7 @@ if "chat_history" not in st.session_state:
 
 st.sidebar.header('ESF #3 Chatbot BETA')
 st.sidebar.image("uCOP_logo.png", use_column_width=True)  # add logo
-question = st.sidebar.text_input('Enter your question here')
+question = st.text_input('Enter your question here')
 
 if question and (len(st.session_state.chat_history) == 0 or question != st.session_state.chat_history[-1][0]):
     with st.spinner('Thinking...'):
