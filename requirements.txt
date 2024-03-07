@@ -1,5 +1,6 @@
 langchain
 openai
 tiktoken
-streamlit==1.28.1
-chromadb==0.4.17
+streamlit
+chromadb
+pysqlite3-binary
