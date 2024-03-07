@@ -36,7 +36,7 @@ def ask_question(question):
     try:
         llm_response = qa_chain(question)
         try:
-            source = llm_response["source_documents"][0].metadata['source'].replace(r"C:\Users\g3retjjj\Documents\chatbot_data\sop.txt",r"\\nwk-netapp2.nwk.ds.usace.army.mil\MISSIONFILES\MissionProjects\civ\Temporary Roofing\2.0 SOP\2023\2023 Temporary Roofing SOP.pdf")
+            source = llm_response["source_documents"][0].metadata['source'].replace(r"C:\Users\g3retjjj\Documents\chatbot_data\sop.txt","2023 Temporary Roofing SOP")
             return llm_response['result'] + '\n\nSource: ' + source
         except:
             return "Apologies but I cannot find the answer in my source material"
